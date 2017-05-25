@@ -97,23 +97,8 @@ public class APILoader {
     }
 
     public void loadYears() {
-loadYearsSorted();
-//        buildClient().loadYears("years").enqueue(new Callback<Years>() {
-//             @Override
-//             public void onResponse(Call<Years> call, Response<Years> response) {
-//
-//                 EventBus.getDefault().post(new MessageEvent<Years>((Years) response.body()));
-//                 Log.e(TAG, "Success");
-//             }
-//
-//             @Override
-//             public void onFailure(Call<Years> call, Throwable t) {
-//                 //Todo::Implement
-//                 Log.e("RestError", t.getMessage());
-//             }
-//         }
-//
-//        );
+            loadYearsSorted();
+
     }
 
     public void loadModels(int year, String make) {

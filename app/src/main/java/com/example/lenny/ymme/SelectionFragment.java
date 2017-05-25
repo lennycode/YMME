@@ -4,12 +4,16 @@ package com.example.lenny.ymme;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.lenny.ymme.models.Engines;
+import com.example.lenny.ymme.models.Makes;
+import com.example.lenny.ymme.models.Models;
 import com.example.lenny.ymme.models.YMMEElement;
 import com.example.lenny.ymme.models.Years;
 import com.example.lenny.ymme.network.APILoader;
@@ -49,6 +53,7 @@ public class SelectionFragment extends Fragment {
     Retrofit myRetro;
     APILoader communicator;
     RecyclerView.LayoutManager layoutManager;
+
     public SelectionFragment() {
         // Required empty public constructor
     }
@@ -160,15 +165,17 @@ public class SelectionFragment extends Fragment {
 
         //myAdapter = new CarLayoutAdapter(((Models) event.packet).getModels());
         databuff = ((YMMEElement) event.packet).getData();
-        if (event.packet instanceof Years) {
-            //return;
-        } else{
 
-        }
         myAdapter = new CarLayoutAdapter(getActivity(), (YMMEElement) event.packet,mAction);
 
         recyclerView.setAdapter(myAdapter);
-        //oast.makeText(getActivity(), event.message, Toast.LENGTH_SHORT).show();
+        if(event.packet instanceof Models) {
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setSubtitle(((Models)event.packet).getYear() +">"+((Models)event.packet).getMake());
+        }else if (event.packet instanceof Makes){
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setSubtitle(((Makes)event.packet).getYear());
+        }else if (event.packet instanceof Engines){
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setSubtitle(((Engines)event.packet).getYear() +">"+((Engines)event.packet).getMake()+">"+((Engines)event.packet).getModel() );
+        }
     }
 
 

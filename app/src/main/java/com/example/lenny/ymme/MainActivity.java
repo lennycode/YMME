@@ -34,6 +34,10 @@ public class MainActivity extends AppCompatActivity {
     Retrofit myRetro;
     APILoader communicator;
     RecyclerView.LayoutManager layoutManager;
+    String state;
+    Toolbar toolbar;
+    final String baseToolbar = "Please Select a Year";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,18 +45,20 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        if( savedInstanceState == null) {
+            toolbar.setSubtitle(baseToolbar);
+        }
 
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+//            }
+//        });
 
         SelectionFragment selectionFragment = SelectionFragment.newInstanceYears();
         getSupportFragmentManager().beginTransaction().add(R.id.frag_container, selectionFragment, getResources().getString(R.string.YEARS_FRAG)).addToBackStack(getResources().getString(R.string.YEARS_FRAG)).commit();
@@ -62,6 +68,20 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        String[] tbInfo = toolbar.getSubtitle().toString().split(">");
+        switch (tbInfo.length){
+            case 3:
+                toolbar.setSubtitle(tbInfo[0]+">"+tbInfo[1]);
+                break;
+            case 2:
+                toolbar.setSubtitle(tbInfo[0]);
+                break;
+            case 1:
+                toolbar.setSubtitle(baseToolbar);
+                break;
+        }
+
+
         SelectionFragment selectionFragment = (SelectionFragment) getSupportFragmentManager().findFragmentByTag(getResources().getString(R.string.YEARS_FRAG));
         if (selectionFragment != null && selectionFragment.isVisible()) {
 
@@ -149,6 +169,10 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
 
     @Override
     public void onStart() {
