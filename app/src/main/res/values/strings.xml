@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">YMME</string>
+    <string name="action_settings">Settings</string>
+
+
+    <string name="YMM_ID_KEY">ymmid</string>
+
+    <string name="YEARS_FRAG">years</string>
+    <string name="MAKES_FRAG">makes</string>
+    <string name="MODELS_FRAG">models</string>
+    <string name="ENGINES_FRAG">engines</string>
+</resources>
