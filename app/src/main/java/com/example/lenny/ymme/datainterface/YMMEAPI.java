@@ -19,19 +19,22 @@ public interface YMMEAPI {
     //http://grocerygetter.x10host.com/vehendpoint.php?mode=years
     //Leading slash resolves to root domain
     @GET("vehendpoint.php")
-    Call<Years> loadyears(@Query("mode") String mode);
+    Call<Years> loadYears(@Query("mode") String mode);
 
     @GET("vehendpoint.php")
-    Call<Makes> loadmakes(@Query("mode") String mode,
+    io.reactivex.Observable<Years> loadYearsSorted(@Query("mode") String mode);
+
+    @GET("vehendpoint.php")
+    Call<Makes> loadMakes(@Query("mode") String mode,
                           @Query("year") int year);
 
     @GET("vehendpoint.php")
-    Call<Models> loadmodels(@Query("mode") String mode,
+    Call<Models> loadModels(@Query("mode") String mode,
                             @Query("year") int year,
                             @Query("make") String make);
 
     @GET("vehendpoint.php")
-    Call<Engines> loadengines(@Query("mode") String mode,
+    Call<Engines> loadEngines(@Query("mode") String mode,
                               @Query("year") int year,
                               @Query("make") String make,
                               @Query("model") String model);
