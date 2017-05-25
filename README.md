@@ -1,5 +1,7 @@
 # YMME
-A database of year, make, model, engine configuration for cars sold in US, along with an Android Viewer. The Android app uses Fragments and RecyclerViews to manage hierarchical data. Quicky identify vehicles when the VIN isn't available or you don't have a VIN decoding API, or use as a backup if the service is down. 
+A database of year, make, model, engine configuration for cars sold in US, along with an Android Viewer. The Android app uses Fragments and RecyclerViews to manage hierarchical data. Quicky identify vehicles when the VIN isn't available or you don't have a VIN decoding API, or use as a backup if the service is down. Don't need the Android app? Just download the contents of
+
+'\API Server'
 
 This project has a few parts:
 
@@ -20,6 +22,8 @@ An API Server folder:
   -A light API endpoint to serve JSON
   
       http://??.com/vehendpoint.php?mode=makes&year=2013   - Fetches all makes for 2013 (See the API for more)
+  
+ This was distilled from a larger project so paths, configuration, etc in the above must be modified.
   
    
  Also, there is an Android app to view this data. The app uses Retrofit, EventBus, RecyclerView and Fragments. 
