@@ -1,5 +1,5 @@
 # YMME
-A database of year, make, model, engine configuration for cars sold in US, along with an Android Viewer. The Android app uses Fragments and RecyclerViews to manage hierarchical data.
+A database of year, make, model, engine configuration for cars sold in US, along with an Android Viewer. The Android app uses Fragments and RecyclerViews to manage hierarchical data. Quicky identify vehicles when the VIN isn't available or you don't have a VIN decoding API, or use as a backup if the service is down. 
 
 This project has a few parts:
 
@@ -23,4 +23,4 @@ An API Server folder:
   
    
  Also, there is an Android app to view this data. The app uses Retrofit, EventBus, RecyclerView and Fragments. 
- It is a good starting point for apps using those componenets.
+ It is a good starting point for apps using those componenets. The app currently contains a working endpoint.
