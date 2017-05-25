@@ -4,6 +4,8 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -37,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     String state;
     Toolbar toolbar;
     final String baseToolbar = "Please Select a Year";
+    private FragmentTransaction fragmentTransaction;
 
 
     @Override
@@ -51,14 +54,6 @@ public class MainActivity extends AppCompatActivity {
             toolbar.setSubtitle(baseToolbar);
         }
 
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
 
         SelectionFragment selectionFragment = SelectionFragment.newInstanceYears();
         getSupportFragmentManager().beginTransaction().add(R.id.frag_container, selectionFragment, getResources().getString(R.string.YEARS_FRAG)).addToBackStack(getResources().getString(R.string.YEARS_FRAG)).commit();
@@ -68,18 +63,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        String[] tbInfo = toolbar.getSubtitle().toString().split(">");
-        switch (tbInfo.length){
-            case 3:
-                toolbar.setSubtitle(tbInfo[0]+">"+tbInfo[1]);
-                break;
-            case 2:
-                toolbar.setSubtitle(tbInfo[0]);
-                break;
-            case 1:
-                toolbar.setSubtitle(baseToolbar);
-                break;
-        }
+
+        updateToolBarReverse();
 
 
         SelectionFragment selectionFragment = (SelectionFragment) getSupportFragmentManager().findFragmentByTag(getResources().getString(R.string.YEARS_FRAG));
@@ -103,20 +88,38 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void updateToolBarReverse() {
+        String[] tbInfo = toolbar.getSubtitle().toString().split(">");
+        switch (tbInfo.length){
+            case 3:
+                toolbar.setSubtitle(tbInfo[0]+">"+tbInfo[1]);
+                break;
+            case 2:
+                toolbar.setSubtitle(tbInfo[0]);
+                break;
+            case 1:
+                toolbar.setSubtitle(baseToolbar);
+                break;
+        }
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onFragmentSwapEvent(FragmentSwapEvent event) {
         String[] params = event.packet;
         String action = params[0];
         String selection = event.selection;
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.forward_animation,
+                R.anim.static_animation, R.anim.static_animation, R.anim.reverse_animation);
+
         try {
             switch (action) {
                 case "Years": //Boot up the makes fragment
                     SelectionFragment makesFragment = (SelectionFragment) getSupportFragmentManager().findFragmentByTag(getResources().getString(R.string.MAKES_FRAG));
                     if (makesFragment == null) {
                         makesFragment = SelectionFragment.newInstanceMakes(Config.Dtypes.Makes, Integer.parseInt(selection));
-                        getSupportFragmentManager().beginTransaction().replace(R.id.frag_container, makesFragment, getResources().getString(R.string.MAKES_FRAG)).addToBackStack(getResources().getString(R.string.MAKES_FRAG)).commit();
+                        fragmentTransaction.replace(R.id.frag_container, makesFragment, getResources().getString(R.string.MAKES_FRAG)).addToBackStack(getResources().getString(R.string.MAKES_FRAG)).commit();
                     } else {
-                        getSupportFragmentManager().beginTransaction().replace(R.id.frag_container, makesFragment);
+                        fragmentTransaction.replace(R.id.frag_container, makesFragment).commit();
                     }
 
                     break;
@@ -125,9 +128,9 @@ public class MainActivity extends AppCompatActivity {
                     SelectionFragment modelsFragment = (SelectionFragment) getSupportFragmentManager().findFragmentByTag(getResources().getString(R.string.MODELS_FRAG));
                     if (modelsFragment == null) {
                         modelsFragment = SelectionFragment.newInstanceModels(Config.Dtypes.Models, Integer.parseInt(params[1]), selection);
-                        getSupportFragmentManager().beginTransaction().replace(R.id.frag_container, modelsFragment, getResources().getString(R.string.MAKES_FRAG)).addToBackStack(getResources().getString(R.string.ENGINES_FRAG)).commit();
+                        fragmentTransaction.replace(R.id.frag_container, modelsFragment, getResources().getString(R.string.MAKES_FRAG)).addToBackStack(getResources().getString(R.string.ENGINES_FRAG)).commit();
                     } else {
-                        getSupportFragmentManager().beginTransaction().replace(R.id.frag_container, modelsFragment);
+                        fragmentTransaction.replace(R.id.frag_container, modelsFragment).commit();
                     }
 
                     break;
@@ -135,9 +138,9 @@ public class MainActivity extends AppCompatActivity {
                     SelectionFragment enginesFragment = (SelectionFragment) getSupportFragmentManager().findFragmentByTag(getResources().getString(R.string.ENGINES_FRAG));
                     if (enginesFragment == null) {
                         enginesFragment = SelectionFragment.newInstanceEngines(Config.Dtypes.Engines, Integer.parseInt(params[1]), params[2], selection);
-                        getSupportFragmentManager().beginTransaction().replace(R.id.frag_container, enginesFragment, getResources().getString(R.string.ENGINES_FRAG)).addToBackStack(getResources().getString(R.string.ENGINES_FRAG)).commit();
+                        fragmentTransaction.replace(R.id.frag_container, enginesFragment, getResources().getString(R.string.ENGINES_FRAG)).addToBackStack(getResources().getString(R.string.ENGINES_FRAG)).commit();
                     } else {
-                        getSupportFragmentManager().beginTransaction().replace(R.id.frag_container, enginesFragment);
+                        fragmentTransaction.replace(R.id.frag_container, enginesFragment).commit();
                     }
                     break;
             }

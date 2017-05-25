@@ -162,13 +162,13 @@ public class SelectionFragment extends Fragment {
     // This method will be called when a MessageEvent is posted (in the UI thread for Toast)
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(MessageEvent event) {
-
-        //myAdapter = new CarLayoutAdapter(((Models) event.packet).getModels());
         databuff = ((YMMEElement) event.packet).getData();
-
         myAdapter = new CarLayoutAdapter(getActivity(), (YMMEElement) event.packet,mAction);
-
         recyclerView.setAdapter(myAdapter);
+        updateToolbarForward(event);
+    }
+
+    private void updateToolbarForward(MessageEvent event) {
         if(event.packet instanceof Models) {
             ((AppCompatActivity) getActivity()).getSupportActionBar().setSubtitle(((Models)event.packet).getYear() +">"+((Models)event.packet).getMake());
         }else if (event.packet instanceof Makes){
