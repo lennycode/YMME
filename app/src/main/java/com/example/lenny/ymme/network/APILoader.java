@@ -27,7 +27,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class APILoader {
     private static final String TAG = "APILoader";
 
-    private YMMEAPI bootUp() {
+    private YMMEAPI buildClient() {
 
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -50,45 +50,39 @@ public class APILoader {
 
     public void loadYears() {
 
-        YMMEAPI service = bootUp();
-       // Call<Years> call = service.loadyears("years");
+        buildClient().loadyears("years").enqueue(new Callback<Years>() {
+             @Override
+             public void onResponse(Call<Years> call, Response<Years> response) {
 
-        service.loadyears("years").enqueue(new Callback<Years>() {
-                         @Override
-                         public void onResponse(Call<Years> call, Response<Years> response) {
+                 EventBus.getDefault().post(new MessageEvent<Years>((Years) response.body()));
+                 Log.e(TAG, "Success");
+             }
 
-                             EventBus.getDefault().post(new MessageEvent<Years>((Years) response.body()));
-                             Log.e(TAG, "Success");
-                         }
-
-                         @Override
-                         public void onFailure(Call<Years> call, Throwable t) {
-                             //Todo::Implement
-                             Log.e("RestError", t.getMessage());
-                         }
-                     }
+             @Override
+             public void onFailure(Call<Years> call, Throwable t) {
+                 //Todo::Implement
+                 Log.e("RestError", t.getMessage());
+             }
+         }
 
         );
     }
 
     public void loadModels(int year, String make) {
 
-        YMMEAPI service = bootUp();
-        Call<Models> call = service.loadmodels("models", year, make);
+        buildClient().loadmodels("models", year, make).enqueue(new Callback<Models>() {
+               @Override
+               public void onResponse(Call<Models> call, Response<Models> response) {
 
-        call.enqueue(new Callback<Models>() {
-                         @Override
-                         public void onResponse(Call<Models> call, Response<Models> response) {
+                   EventBus.getDefault().post(new MessageEvent<Models>((Models) response.body()));
+                   Log.e(TAG, "Success");
+               }
 
-                             EventBus.getDefault().post(new MessageEvent<Models>((Models) response.body()));
-                             Log.e(TAG, "Success");
-                         }
-
-                         @Override
-                         public void onFailure(Call<Models> call, Throwable t) {
-                             Log.e("RestError", t.getMessage());
-                         }
-                     }
+               @Override
+               public void onFailure(Call<Models> call, Throwable t) {
+                   Log.e("RestError", t.getMessage());
+               }
+           }
 
         );
     }
@@ -96,45 +90,39 @@ public class APILoader {
 
     public void loadEngines(int year, String make, String model) {
 
-        YMMEAPI service = bootUp();
-        Call<Engines> call = service.loadengines("engines", year, make, model);
+        buildClient().loadengines("engines", year, make, model).enqueue(new Callback<Engines>() {
+                @Override
+                public void onResponse(Call<Engines> call, Response<Engines> response) {
 
-        call.enqueue(new Callback<Engines>() {
-                         @Override
-                         public void onResponse(Call<Engines> call, Response<Engines> response) {
+                    EventBus.getDefault().post(new MessageEvent<Engines>((Engines) response.body()));
+                    Log.e(TAG, "Success");
+                }
 
-                             EventBus.getDefault().post(new MessageEvent<Engines>((Engines) response.body()));
-                             Log.e(TAG, "Success");
-                         }
+                @Override
+                public void onFailure(Call<Engines> call, Throwable t) {
 
-                         @Override
-                         public void onFailure(Call<Engines> call, Throwable t) {
-
-                             Log.e("RestError", t.getMessage());
-                         }
-                     }
+                    Log.e("RestError", t.getMessage());
+                }
+            }
 
         );
     }
 
     public void loadMakes(int year) {
 
-        YMMEAPI service = bootUp();
-        Call<Makes> call = service.loadmakes("makes", year);
+        buildClient().loadmakes("makes", year).enqueue(new Callback<Makes>() {
+                   @Override
+                   public void onResponse(Call<Makes> call, Response<Makes> response) {
+                       EventBus.getDefault().post(new MessageEvent<Makes>((Makes) response.body()));
+                       Log.e(TAG, "Success");
+                   }
 
-        call.enqueue(new Callback<Makes>() {
-                         @Override
-                         public void onResponse(Call<Makes> call, Response<Makes> response) {
+                   @Override
+                   public void onFailure(Call<Makes> call, Throwable t) {
 
-                             Log.e(TAG, "Success");
-                         }
-
-                         @Override
-                         public void onFailure(Call<Makes> call, Throwable t) {
-
-                             Log.e("RestError", t.getMessage());
-                         }
-                     }
+                       Log.e("RestError", t.getMessage());
+                   }
+               }
 
         );
     }

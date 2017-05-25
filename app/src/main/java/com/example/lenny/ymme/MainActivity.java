@@ -8,6 +8,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -87,39 +88,42 @@ public class MainActivity extends AppCompatActivity {
         String[] params = event.packet;
         String action = params[0];
         String selection = event.selection;
-        switch (action) {
-            case "Years": //Boot up the makes fragment
-                SelectionFragment makesFragment = (SelectionFragment) getSupportFragmentManager().findFragmentByTag(getResources().getString(R.string.MAKES_FRAG));
-                if (makesFragment == null) {
-                    makesFragment = SelectionFragment.newInstanceMakes(Config.Dtypes.Makes, Integer.parseInt(selection));
-                    getSupportFragmentManager().beginTransaction().replace(R.id.frag_container, makesFragment, getResources().getString(R.string.MAKES_FRAG)).addToBackStack(getResources().getString(R.string.MAKES_FRAG)).commit();
-                } else {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.frag_container, makesFragment);
-                }
+        try {
+            switch (action) {
+                case "Years": //Boot up the makes fragment
+                    SelectionFragment makesFragment = (SelectionFragment) getSupportFragmentManager().findFragmentByTag(getResources().getString(R.string.MAKES_FRAG));
+                    if (makesFragment == null) {
+                        makesFragment = SelectionFragment.newInstanceMakes(Config.Dtypes.Makes, Integer.parseInt(selection));
+                        getSupportFragmentManager().beginTransaction().replace(R.id.frag_container, makesFragment, getResources().getString(R.string.MAKES_FRAG)).addToBackStack(getResources().getString(R.string.MAKES_FRAG)).commit();
+                    } else {
+                        getSupportFragmentManager().beginTransaction().replace(R.id.frag_container, makesFragment);
+                    }
 
-                break;
-            case "Makes":
+                    break;
+                case "Makes":
 
-                SelectionFragment modelsFragment = (SelectionFragment) getSupportFragmentManager().findFragmentByTag(getResources().getString(R.string.MODELS_FRAG));
-                if (modelsFragment == null) {
-                    modelsFragment = SelectionFragment.newInstanceModels(Config.Dtypes.Models, Integer.parseInt(params[1]), selection);
-                    getSupportFragmentManager().beginTransaction().replace(R.id.frag_container, modelsFragment, getResources().getString(R.string.MAKES_FRAG)).addToBackStack(getResources().getString(R.string.ENGINES_FRAG)).commit();
-                } else {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.frag_container, modelsFragment);
-                }
+                    SelectionFragment modelsFragment = (SelectionFragment) getSupportFragmentManager().findFragmentByTag(getResources().getString(R.string.MODELS_FRAG));
+                    if (modelsFragment == null) {
+                        modelsFragment = SelectionFragment.newInstanceModels(Config.Dtypes.Models, Integer.parseInt(params[1]), selection);
+                        getSupportFragmentManager().beginTransaction().replace(R.id.frag_container, modelsFragment, getResources().getString(R.string.MAKES_FRAG)).addToBackStack(getResources().getString(R.string.ENGINES_FRAG)).commit();
+                    } else {
+                        getSupportFragmentManager().beginTransaction().replace(R.id.frag_container, modelsFragment);
+                    }
 
-                break;
-            case "Models":
-                SelectionFragment enginesFragment = (SelectionFragment) getSupportFragmentManager().findFragmentByTag(getResources().getString(R.string.ENGINES_FRAG));
-                if (enginesFragment == null) {
-                    enginesFragment = SelectionFragment.newInstanceEngines(Config.Dtypes.Engines, Integer.parseInt(params[1]), params[2], selection);
-                    getSupportFragmentManager().beginTransaction().replace(R.id.frag_container, enginesFragment, getResources().getString(R.string.ENGINES_FRAG)).addToBackStack(getResources().getString(R.string.ENGINES_FRAG)).commit();
-                } else {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.frag_container, enginesFragment);
-                }
-                break;
+                    break;
+                case "Models":
+                    SelectionFragment enginesFragment = (SelectionFragment) getSupportFragmentManager().findFragmentByTag(getResources().getString(R.string.ENGINES_FRAG));
+                    if (enginesFragment == null) {
+                        enginesFragment = SelectionFragment.newInstanceEngines(Config.Dtypes.Engines, Integer.parseInt(params[1]), params[2], selection);
+                        getSupportFragmentManager().beginTransaction().replace(R.id.frag_container, enginesFragment, getResources().getString(R.string.ENGINES_FRAG)).addToBackStack(getResources().getString(R.string.ENGINES_FRAG)).commit();
+                    } else {
+                        getSupportFragmentManager().beginTransaction().replace(R.id.frag_container, enginesFragment);
+                    }
+                    break;
+            }
+        }catch (Exception e){
+            Log.d("FRG-SWAP", e.getMessage());
         }
-
     }
 
 
