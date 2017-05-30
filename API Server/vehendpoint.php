@@ -1,8 +1,8 @@
 <?php
  
   
-$db = new PDO('mysql:host=localhost;dbname=grocery2_ymmbase;charset=utf8mb4',
- 'grocery2', 'abc123ABC!@#');
+$db = new PDO('mysql:host=localhost;dbname=database;charset=utf8mb4',
+ 'user', 'pass');
 
  
 $mode= htmlspecialchars($_GET["mode"]);
